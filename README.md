@@ -50,37 +50,46 @@ src/
 
 
 2. Component Planning (What You Must Build)
+
 🔹 Core Components
+
 2.1 Product Side
-ProductCard → shows image, price, rating
-ProductGrid → layout
-ProductFilters → category + price + sort
-SearchBar
+- ProductCard → shows image, price, rating
+- ProductGrid → layout
+- ProductFilters → category + price + sort
+- SearchBar
 
 2.2 Cart Side
-CartItem → quantity stepper + remove
-CartSummary → subtotal, tax, total
-CouponBox → apply/remove coupon
+- CartItem → quantity stepper + remove
+- CartSummary → subtotal, tax, total
+- CouponBox → apply/remove coupon
 
 2.3 Checkout
-OrderSummary
+- OrderSummary
+
 
 🔹 Smart Components (Important)
-CartContext → global cart state
-useCart() → reusable cart logic
-useLocalStorage() → persistence hook
+
+- CartContext → global cart state
+- useCart() → reusable cart logic
+- useLocalStorage() → persistence hook
+
 
 3. Routing Plan (React Router)
-/
-/products/:id
-/cart
-/checkout
 
-Flow
-Home → Product Details → Cart → Checkout
+/  
+/products/:id  
+/cart  
+/checkout  
+
+Flow  
+Home → Product Details → Cart → Checkout  
+
 
 7. State Management Plan
-Use Context API
+
+Use Context API  
+
 CartContext:
 - cartItems
 - addToCart()
@@ -88,6 +97,7 @@ CartContext:
 - updateQuantity()
 - applyCoupon()
 - clearCart()
+
 
 8. localStorage Strategy
 
@@ -97,16 +107,18 @@ useEffect(() => {
   localStorage.setItem("cart", JSON.stringify(cart));
 }, [cart]);
 
+
 9. Edge Cases (Interview Gold)
 
 You MUST plan these:
 
-Quantity > stock
-Invalid coupon
-Empty cart checkout
-Duplicate item add
-Refresh during checkout
-Floating point price errors
+- Quantity > stock
+- Invalid coupon
+- Empty cart checkout
+- Duplicate item add
+- Refresh during checkout
+- Floating point price errors
+
 
 10. Visual Architecture Diagram
 
@@ -124,8 +136,8 @@ Floating point price errors
         ┌───────────────┬─────────┴─────────┬───────────────┐
         ▼               ▼                   ▼               ▼
 ┌──────────────┐ ┌──────────────┐  ┌──────────────┐ ┌──────────────┐
-│   Home.jsx   │ │ProductDetails│  │   Cart.jsx   │ │ Checkout.jsx │
-│ (Catalog)    │ │    .jsx      │  │              │ │              │
+│   Home.jsx   │ │ ProductDetails│ │   Cart.jsx   │ │ Checkout.jsx │
+│ (Catalog)    │ │     .jsx      │ │              │ │              │
 └──────┬───────┘ └──────┬───────┘  └──────┬───────┘ └──────┬───────┘
        │                │                 │                │
        ▼                ▼                 ▼                ▼
@@ -135,7 +147,7 @@ Floating point price errors
 ├──────────────────────────────────────────────────────────────────┤
 │ ProductGrid   ProductCard   Filters   SearchBar                  │
 │ CartItem      CartSummary   CouponBox                            │
-│ OrderSummary  Navbar                                           │
+│ OrderSummary  Navbar                                             │
 └──────────────────────────────────────────────────────────────────┘
                                   │
                                   ▼
@@ -155,7 +167,7 @@ Floating point price errors
         ┌─────────────────────┼─────────────────────┐
         ▼                     ▼                     ▼
 ┌──────────────┐   ┌──────────────────┐   ┌──────────────────┐
-│ pricing.js   │   │  filters.js      │   │ localStorage     │
+│ pricing.js   │   │ filters.js       │   │ localStorage     │
 │ (tax/total)  │   │ (search/sort)    │   │ (persistence)    │
 └──────────────┘   └──────────────────┘   └──────────────────┘
                               │
@@ -165,18 +177,18 @@ Floating point price errors
                     │ (Static Dataset)   │
                     └────────────────────┘
 
+
 11. Data Flow
 
-🛒 Add to Cart Flow
-ProductCard → useCart() → CartContext → localStorage
+🛒 Add to Cart Flow  
+ProductCard → useCart() → CartContext → localStorage  
 
-💰 Pricing Flow
-CartContext → pricing.js → CartSummary → UI
+💰 Pricing Flow  
+CartContext → pricing.js → CartSummary → UI  
 
-🔍 Filter/Search Flow
-User Input → filters.js → ProductGrid → UI अपडेट
+🔍 Filter/Search Flow  
+User Input → filters.js → ProductGrid → UI update  
 
-🔁 Persistence Flow
-CartContext → localStorage (save)
+🔁 Persistence Flow  
+CartContext → localStorage (save)  
 App Load → localStorage → CartContext (restore)
-
