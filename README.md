@@ -1,5 +1,8 @@
-1. Final Folder Structure (Production-Ready)
+```markdown
+# 1. Final Folder Structure (Production-Ready)
 
+```
+```
 src/
 │── assets/              # images, icons
 │
@@ -48,80 +51,98 @@ src/
 │── App.jsx
 │── main.jsx
 
+```
 
-2. Component Planning (What You Must Build)
+```
 
-🔹 Core Components
+---
 
-2.1 Product Side
-- ProductCard → shows image, price, rating
-- ProductGrid → layout
-- ProductFilters → category + price + sort
-- SearchBar
+# 2. Component Planning (What You Must Build)
 
-2.2 Cart Side
-- CartItem → quantity stepper + remove
-- CartSummary → subtotal, tax, total
-- CouponBox → apply/remove coupon
+## 🔹 Core Components
 
-2.3 Checkout
-- OrderSummary
+### 2.1 Product Side
+- ProductCard → shows image, price, rating  
+- ProductGrid → layout  
+- ProductFilters → category + price + sort  
+- SearchBar  
 
+### 2.2 Cart Side
+- CartItem → quantity stepper + remove  
+- CartSummary → subtotal, tax, total  
+- CouponBox → apply/remove coupon  
 
-🔹 Smart Components (Important)
+### 2.3 Checkout
+- OrderSummary  
 
-- CartContext → global cart state
-- useCart() → reusable cart logic
-- useLocalStorage() → persistence hook
+---
 
+## 🔹 Smart Components (Important)
 
-3. Routing Plan (React Router)
+- CartContext → global cart state  
+- useCart() → reusable cart logic  
+- useLocalStorage() → persistence hook  
 
-/  
-/products/:id  
-/cart  
-/checkout  
+---
 
-Flow  
+# 3. Routing Plan (React Router)
+
+```
+
+/
+/products/:id
+/cart
+/checkout
+
+````
+
+**Flow**  
 Home → Product Details → Cart → Checkout  
 
+---
 
-7. State Management Plan
+# 7. State Management Plan
 
 Use Context API  
 
-CartContext:
-- cartItems
-- addToCart()
-- removeFromCart()
-- updateQuantity()
-- applyCoupon()
-- clearCart()
+**CartContext:**
+- cartItems  
+- addToCart()  
+- removeFromCart()  
+- updateQuantity()  
+- applyCoupon()  
+- clearCart()  
 
+---
 
-8. localStorage Strategy
+# 8. localStorage Strategy
 
-Hook idea:
+**Hook idea:**
 
+```js
 useEffect(() => {
   localStorage.setItem("cart", JSON.stringify(cart));
 }, [cart]);
+````
 
+---
 
-9. Edge Cases (Interview Gold)
+# 9. Edge Cases (Interview Gold)
 
 You MUST plan these:
 
-- Quantity > stock
-- Invalid coupon
-- Empty cart checkout
-- Duplicate item add
-- Refresh during checkout
-- Floating point price errors
+* Quantity > stock
+* Invalid coupon
+* Empty cart checkout
+* Duplicate item add
+* Refresh during checkout
+* Floating point price errors
 
+---
 
-10. Visual Architecture Diagram
+# 10. Visual Architecture Diagram
 
+```
                         ┌──────────────────────┐
                         │      App.jsx         │
                         │ (Root Component)     │
@@ -176,19 +197,28 @@ You MUST plan these:
                     │  products.js       │
                     │ (Static Dataset)   │
                     └────────────────────┘
+```
 
+---
 
-11. Data Flow
+# 11. Data Flow
 
-🛒 Add to Cart Flow  
-ProductCard → useCart() → CartContext → localStorage  
+## 🛒 Add to Cart Flow
 
-💰 Pricing Flow  
-CartContext → pricing.js → CartSummary → UI  
+ProductCard → useCart() → CartContext → localStorage
 
-🔍 Filter/Search Flow  
-User Input → filters.js → ProductGrid → UI update  
+## 💰 Pricing Flow
 
-🔁 Persistence Flow  
-CartContext → localStorage (save)  
+CartContext → pricing.js → CartSummary → UI
+
+## 🔍 Filter/Search Flow
+
+User Input → filters.js → ProductGrid → UI update
+
+## 🔁 Persistence Flow
+
+CartContext → localStorage (save)
 App Load → localStorage → CartContext (restore)
+
+```
+```
