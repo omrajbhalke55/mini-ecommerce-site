@@ -1,0 +1,23 @@
+<svg width="250" height="100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <!-- <rect width="250" height="100" rx="15" fill="#F5FAFF"/> -->
+  <rect width="250" height="100" rx="15" fill="#fff"/>
+
+  <!-- Medical Cross Icon -->
+  <g transform="translate(20,20)">
+    <rect x="18" y="0" width="14" height="50" rx="4" fill="#2AA7A1"/>
+    <rect x="0" y="18" width="50" height="14" rx="4" fill="#2AA7A1"/>
+  </g>
+
+  <!-- Brand Name -->
+  <text x="80" y="55" font-family="Arial, Helvetica, sans-serif" 
+        font-size="32" font-weight="bold" fill="#1B3C59">
+    Medi<tspan fill="#2AA7A1">HAA</tspan>
+  </text>
+
+  <!-- Tagline (optional) -->
+  <text x="80" y="68" font-family="Arial, Helvetica, sans-serif" 
+        font-size="12" fill="#6B8A9B">
+    Your Health, Delivered
+  </text>
+</svg>
