@@ -1,5 +1,5 @@
 ```markdown
-# 1. Final Folder Structure (Production-Ready)
+# 1. Final Folder Structure
 
 ```
 ```
@@ -88,12 +88,12 @@ src/
 # 3. Routing Plan (React Router)
 
 ```
-
+```
 /
 /products/:id
 /cart
 /checkout
-
+```
 ````
 
 **Flow**  
