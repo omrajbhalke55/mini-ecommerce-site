@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import logo from '../../assets/logo.svg'
+import useCart from "../../hooks/useCart";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false)
+    const { cartItems } = useCart();
 
     return (
         <>
@@ -40,7 +42,6 @@ const Navbar = () => {
 
                 {/* RIGHT: CART BUTTON */}
                 <button className="hidden md:flex items-center gap-2 text-black text-sm font-medium px-4 py-2 rounded-full hover:bg-[#2AA7A1]">
-                    Cart
 
                     {/* Cart Icon */}
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -49,6 +50,7 @@ const Navbar = () => {
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                     </svg>
 
+                    Cart ({cartItems.length})
                 </button>
 
                 {/* MOBILE MENU BUTTON */}
