@@ -1,3 +1,5 @@
+// import {imagelinks} from "/imagelinks";
+
 export const products = [
   {
     id: "p1",
@@ -7,7 +9,7 @@ export const products = [
     filter: "fever, pain, headache, cold",
     rating: 4.6,
     stock: 120,
-    image: "...",
+    image: "https://www.abibapharmacia.com/wp-content/uploads/2022/08/Diptamp-500-Tab.jpg",
     description: "Used to treat fever and mild to moderate pain."
   },
   {

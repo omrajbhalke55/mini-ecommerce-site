@@ -1,11 +1,20 @@
-[{
-  id: "p1",
-  name: "Wireless Headphones",
-  price: 1999,
-  category: "electronics",
-  rating: 4.5,
-  stock: 10,
-  image: "url",
-  description: "..."
-}]
-// basic data structure
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "../pages/Home";
+import ProductDetails from "../pages/ProductDetails";
+import Cart from "../pages/Cart";
+import Checkout from "../pages/Checkout";
+
+const AppRoutes = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default AppRoutes;
