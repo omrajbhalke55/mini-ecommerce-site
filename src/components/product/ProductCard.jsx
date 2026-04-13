@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
+import { products } from "../../data/product";
+import useCart from "../../hooks/useCart";
 
 const ProductCard = ({ product }) => {
+      const { addToCart } = useCart();
+
   return (
-    <Link to={`/products/${product.id}`}>
-      <div className="border border-zinc-200 rounded-xl p-4 hover:shadow-md transition cursor-pointer bg-white">
+    <div className="border border-zinc-200 rounded-xl p-4 hover:shadow-md transition cursor-pointer bg-white">
+      <Link to={`/products/${product.id}`}>
 
         {/* Image */}
         <div className="w-full h-40 flex items-center justify-center">
@@ -32,12 +36,20 @@ const ProductCard = ({ product }) => {
         </div>
 
         {/* Price */}
-        <p className="mt-2 text-lg font-semibold text-[#2AA7A1]">
+        <p className="mt-2 text-md font-semibold text-[#2AA7A1]">
           ₹{product.price}
         </p>
+      </Link>
+      <div className="flex items-center mt-2 text-sm">
+        <button
+          onClick={() => addToCart(product)}
+          className="w-xs py-2 rounded-md bg-[#2AA7A1] text-white hover:bg-[#23918c] transition cursor-pointer"
+        >
+          Add to Cart
+        </button>
 
       </div>
-    </Link>
+    </div>
   );
 };
 

@@ -4,6 +4,7 @@ export const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
+    const [coupon, setCoupon] = useState(null);
 
     // ADD TO CART
     const addToCart = (product) => {
@@ -43,11 +44,29 @@ const CartProvider = ({ children }) => {
         setCartItems([]);
     };
 
+    // APPLYING COUPONS
+    const applyCoupon = (code) => {
+        if (code === "SAVE10") {
+            setCoupon(code);
+            return true;
+        }
+        return false;
+    };
+
+    const removeCoupon = () => {
+        setCoupon(null);
+    };
+
     return (
         <CartContext.Provider value={{
-            cartItems, addToCart, removeFromCart,
+            cartItems,
+            addToCart,
+            removeFromCart,
             updateQuantity,
-            clearCart
+            clearCart,
+            coupon,
+            applyCoupon,
+            removeCoupon
         }}>
             {children}
         </CartContext.Provider>

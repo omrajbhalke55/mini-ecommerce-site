@@ -110,7 +110,7 @@ const ProductDetails = () => {
                         </p>
                     )}
 
-                    {/* Buttons */}
+                    {/* Button */}
                     <div className="flex items-center mt-10 gap-4 text-sm">
 
                         <button

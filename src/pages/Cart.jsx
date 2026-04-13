@@ -1,5 +1,7 @@
 import useCart from "../hooks/useCart";
 import CartItem from "../components/cart/CartItem";
+import CartSummary from "../components/cart/CartSummary";
+import CouponBox from "../components/cart/CouponBox";
 
 const Cart = () => {
   const { cartItems } = useCart();
@@ -32,6 +34,8 @@ const Cart = () => {
           Total: ₹{total}
         </h2>
       </div>
+      <CouponBox />
+      <CartSummary />
 
     </div>
   );
