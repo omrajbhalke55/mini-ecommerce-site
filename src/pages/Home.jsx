@@ -5,6 +5,10 @@ const Home = () => {
   return (
     <div className="px-6 py-8">
 
+      <div className="hero">
+        
+      </div>
+
       <h1 className="text-2xl font-semibold mb-6">
         All Products
       </h1>

@@ -1,33 +1,30 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { products } from "../data/product";
 import useCart from "../hooks/useCart";
 
 const ProductDetails = () => {
 
     const { id } = useParams();
-    const product = products.find(p => p.id === id);    
+    const product = products.find(p => p.id === id);
     const [thumbnail, setThumbnail] = useState("");
-    
+
     useEffect(() => {
-        if (product?.images?.length > 0) {
-            setThumbnail(product.images[0]);
-        } else if (product?.image) {
-            setThumbnail(product.image);
-        }
+        const thumbnail = product?.images?.[0] || product?.image;
+        if (thumbnail) setThumbnail(thumbnail);
     }, [product]);
-    
+
     // if (!product) return <p className="text-center mt-10">Loading...</p>;
     if (!product) return <p className="text-center mt-10">Product not found</p>;
-    
+
     const { addToCart } = useCart();
 
     return (
-        <div className="max-w-6xl w-full px-6 font-[Geist]">
+        <div className="max-w-6xl w-full my-10 px-6 font-[Geist]">
 
             {/* Breadcrumb */}
             <p className="text-sm text-zinc-500">
-                <span>Home</span> /
+                <span><Link to="/">Home</Link></span> /
                 <span> Products</span> /
                 <span> {product.category}</span> /
                 <span className="text-[#2AA7A1]"> {product.name}</span>
@@ -78,7 +75,7 @@ const ProductDetails = () => {
 
                     {/* Price */}
                     <div className="mt-6">
-                        <p className="text-zinc-400">
+                        <p className="text-zinc-900">
                             MRP: ₹{product.price}
                         </p>
 
@@ -115,17 +112,14 @@ const ProductDetails = () => {
 
                     {/* Buttons */}
                     <div className="flex items-center mt-10 gap-4 text-sm">
-                        
+
                         <button
                             onClick={() => addToCart(product)}
-                            className="w-full py-3 rounded-full bg-[#F5FAFF] border border-[#6B8A9B] hover:bg-[#eaf6ff] transition"
+                            className="w-full py-3 rounded-full bg-[#2AA7A1] text-white hover:bg-[#23918c] transition cursor-pointer"
                         >
                             Add to Cart
                         </button>
 
-                        <button className="w-full py-3 rounded-full bg-[#2AA7A1] text-white hover:bg-[#23918c] transition">
-                            Buy Now
-                        </button>
                     </div>
 
                 </div>

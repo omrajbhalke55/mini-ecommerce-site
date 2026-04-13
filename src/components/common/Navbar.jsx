@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import logo from '../../assets/logo.svg'
 import useCart from "../../hooks/useCart";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false)
@@ -20,9 +21,9 @@ const Navbar = () => {
             <nav className="bg-white h-16 w-full md:px-10 lg:px-10 xl:px-10 px-6 py-4 flex items-center justify-between gap-30 relative">
 
                 {/* LEFT: IMAGE LOGO */}
-                <a href="#">
+                <Link to="/">
                     <img src={logo} className="h-14 w-auto" alt="logo" />
-                </a>
+                </Link>
 
                 {/* CENTER: SEARCH BAR */}
                 <div className="hidden md:flex items-center bg-[#F5FAFF] border border-[#6B8A9B] rounded-full px-4 py-2 w-xl">
@@ -41,7 +42,8 @@ const Navbar = () => {
                 </div>
 
                 {/* RIGHT: CART BUTTON */}
-                <button className="hidden md:flex items-center gap-2 text-black text-sm font-medium px-4 py-2 rounded-full hover:bg-[#2AA7A1]">
+                <Link to="/cart">
+                <button className="hidden md:flex items-center gap-2 text-black text-sm font-medium px-4 py-2 rounded-md bg-[#2AA7A1] cursor-pointer">
 
                     {/* Cart Icon */}
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -50,8 +52,9 @@ const Navbar = () => {
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                     </svg>
 
-                    Cart ({cartItems.length})
+                    Cart <span>{cartItems.length ? cartItems.length : ""}</span>
                 </button>
+                </Link>
 
                 {/* MOBILE MENU BUTTON */}
                 <button

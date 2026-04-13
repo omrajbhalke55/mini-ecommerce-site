@@ -1,5 +1,3 @@
-// import {imagelinks} from "/imagelinks";
-
 export const products = [
   {
     id: "p1",
