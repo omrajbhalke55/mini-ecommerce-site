@@ -1,63 +1,56 @@
 import { useState } from "react";
 import useCart from "../../hooks/useCart";
 
-const CouponBox = () => {
-  const { coupon, applyCoupon, removeCoupon } = useCart();
-  const [input, setInput] = useState("");
-  const [error, setError] = useState("");
+export default function CouponBox() {
+  const { applyCoupon, removeCoupon, appliedCoupon } = useCart();
+  const [code, setCode] = useState("");
+  const [msg, setMsg] = useState(null);
 
-  const handleApply = () => {
-    const success = applyCoupon(input.trim());
-
-    if (!success) {
-      setError("Invalid coupon");
+  function handleApply() {
+    if (!code.trim()) return;
+    const result = applyCoupon(code.trim());
+    if (result.success) {
+      setMsg({ type: "success", text: `Coupon applied: ${result.label}` });
+      setCode("");
     } else {
-      setError("");
-      setInput("");
+      setMsg({ type: "error", text: "Invalid coupon code." });
     }
-  };
+    setTimeout(() => setMsg(null), 3000);
+  }
 
   return (
-    <div className="border p-4 rounded-xl mt-4">
+    <div className="bg-white rounded-xl shadow-card p-5 mt-4">
+      <div className="text-sm font-bold text-gray-800 mb-3">Apply Coupon</div>
 
-      <h3 className="font-medium mb-2">Apply Coupon</h3>
-
-      {coupon ? (
-        <div className="flex justify-between items-center">
-          <span className="text-green-600">{coupon} applied</span>
-          <button
-            onClick={removeCoupon}
-            className="text-red-500 text-sm"
-          >
-            Remove
-          </button>
+      {appliedCoupon ? (
+        <div className="flex items-center justify-between px-3 py-2.5 rounded-lg bg-brand-light border border-brand text-sm">
+          <span>
+            <span className="font-bold text-brand">{appliedCoupon.code}</span>
+            <span className="text-gray-500 ml-1.5">— {appliedCoupon.label}</span>
+          </span>
+          <button className="bg-transparent border-none cursor-pointer text-red-500 text-lg leading-none p-0.5 hover:text-red-700" onClick={removeCoupon}>×</button>
         </div>
       ) : (
         <>
           <div className="flex gap-2">
             <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Enter coupon"
-              className="border px-2 py-1 flex-1"
+              className="flex-1 px-3 py-2 rounded-lg border border-gray-200 text-sm uppercase tracking-wider outline-none focus:border-brand transition-colors bg-gray-50"
+              value={code}
+              onChange={(e) => setCode(e.target.value.toUpperCase())}
+              placeholder="Enter coupon code"
+              onKeyDown={(e) => e.key === "Enter" && handleApply()}
             />
             <button
+              className="px-4 py-2 bg-[#2AA7A1] text-white text-sm font-semibold rounded-lg border-none cursor-pointer hover:bg-[#23918c] transition-colors whitespace-nowrap"
               onClick={handleApply}
-              className="bg-[#2AA7A1] text-white px-3 rounded"
-            >
-              Apply
-            </button>
+            >Apply</button>
           </div>
-
-          {error && (
-            <p className="text-red-500 text-xs mt-1">
-              {error}
-            </p>
+          {msg && (
+            <p className={`text-xs mt-1.5 ${msg.type === "success" ? "text-brand" : "text-red-500"}`}>{msg.text}</p>
           )}
+          <p className="text-xs text-gray-400 mt-2">Try: SAVE10 · MEDI5 · HEALTH20</p>
         </>
       )}
     </div>
   );
-};
-
-export default CouponBox;
+}
