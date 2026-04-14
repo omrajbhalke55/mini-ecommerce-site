@@ -2,6 +2,7 @@ import useCart from "../hooks/useCart";
 import CartItem from "../components/cart/CartItem";
 import CartSummary from "../components/cart/CartSummary";
 import CouponBox from "../components/cart/CouponBox";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const { cartItems } = useCart();
@@ -36,7 +37,11 @@ const Cart = () => {
       </div>
       <CouponBox />
       <CartSummary />
-
+      <Link to="/checkout">
+        <button className="mt-4 w-full bg-[#2AA7A1] text-white py-3 rounded-full cursor-pointer">
+          Proceed to Checkout
+        </button>
+      </Link>
     </div>
   );
 };

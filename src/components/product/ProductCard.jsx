@@ -3,10 +3,10 @@ import { products } from "../../data/product";
 import useCart from "../../hooks/useCart";
 
 const ProductCard = ({ product }) => {
-      const { addToCart } = useCart();
+  const { addToCart } = useCart();
 
   return (
-    <div className="border border-zinc-200 rounded-xl p-4 hover:shadow-md transition cursor-pointer bg-white">
+    <div className="bg-white border rounded-xl p-4 hover:shadow-md transition">
       <Link to={`/products/${product.id}`}>
 
         {/* Image */}

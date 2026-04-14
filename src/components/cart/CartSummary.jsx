@@ -4,7 +4,7 @@ import { calculatePricing } from "../../utils/pricing";
 import useCart from "../../hooks/useCart";
 
 const CartSummary = () => {
-  const { cartItems } = useCart();
+  const { cartItems, coupon } = useCart();
 
   const { subtotal, tax, discount, total } =
     // calculatePricing(cartItems, "SAVE10"); // temp coupon

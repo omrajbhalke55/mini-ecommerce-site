@@ -1,10 +1,29 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState([]);
-    const [coupon, setCoupon] = useState(null);
+    const [cartItems, setCartItems] = useState(() => {
+        const stored = localStorage.getItem("cart");
+        return stored ? JSON.parse(stored) : [];
+    });
+    // const [coupon, setCoupon] = useState(null);
+    const [coupon, setCoupon] = useState(() => {  // presesting coupons
+        return localStorage.getItem("coupon") || null;
+    });
+
+    useEffect(() => {
+        if (coupon) {
+            localStorage.setItem("coupon", coupon);
+        } else {
+            localStorage.removeItem("coupon");
+        }
+    }, [coupon]);
+
+    // Local storage Persesting data
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cartItems));
+    }, [cartItems]);
 
     // ADD TO CART
     const addToCart = (product) => {
