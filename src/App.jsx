@@ -1,15 +1,17 @@
-import AppRoutes from "./routes/AppRoutes";
+import { BrowserRouter } from "react-router-dom";
+import CartProvider from "./context/CartContext";
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
+import AppRoutes from "./routes/AppRoutes";
 
-function App() {
+export default function App() {
   return (
-    <>
-      <Navbar />
-      <AppRoutes />
-      <Footer />
-    </>
+    <BrowserRouter>
+      <CartProvider>
+        <Navbar />
+        <AppRoutes />
+        <Footer />
+      </CartProvider>
+    </BrowserRouter>
   );
 }
-
-export default App;
