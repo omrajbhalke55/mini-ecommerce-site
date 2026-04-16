@@ -4,46 +4,60 @@ import CartSummary from "../components/cart/CartSummary";
 import CouponBox from "../components/cart/CouponBox";
 import { Link } from "react-router-dom";
 
-const Cart = () => {
-  const { cartItems } = useCart();
-
-  // ✅ TOTAL CALCULATION
-  const total = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
+export default function Cart() {
+  const { cartItems, clearCart, cartCount } = useCart();
 
   if (cartItems.length === 0) {
-    return <h2 className="p-6">Your cart is empty</h2>;
+    return (
+      <div className="page-container">
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-200 mb-4">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <p className="text-lg font-semibold text-gray-700 mb-2">Your cart is empty</p>
+          <p className="text-sm text-gray-400 mb-6">Add some products to get started!</p>
+          <Link to="/" className="px-6 py-2.5 bg-[#2AA7A1] text-white text-sm font-semibold rounded-lg no-underline hover:bg-[#23918c] transition-colors">
+            Browse Products
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-
-      <h1 className="text-2xl font-semibold mb-6">
-        Your Cart
-      </h1>
-
-      {/* Items */}
-      {cartItems.map(item => (
-        <CartItem key={item.id} item={item} />
-      ))}
-
-      {/* Total */}
-      <div className="mt-6 text-right">
-        <h2 className="text-xl font-semibold">
-          Total: ₹{total}
-        </h2>
+    <div className="page-container">
+      <div className="mb-6">
+        <h1 className="text-[28px] font-bold text-gray-800 mb-1">Shopping Cart</h1>
+        <p className="text-sm text-gray-400">{cartCount} item{cartCount !== 1 ? "s" : ""} in your cart</p>
       </div>
-      <CouponBox />
-      <CartSummary />
-      <Link to="/checkout">
-        <button className="mt-4 w-full bg-[#2AA7A1] text-white py-3 rounded-full cursor-pointer">
-          Proceed to Checkout
-        </button>
-      </Link>
+
+      <div className="grid gap-6" style={{ gridTemplateColumns: "1fr 320px" }}>
+        <div className="bg-white rounded-xl shadow-card p-6">
+          <div className="flex justify-between items-center mb-1">
+            <div className="text-base font-bold text-gray-800">Cart Items</div>
+            <button
+              className="text-red-400 hover:text-red-600 text-sm font-medium bg-transparent border-none cursor-pointer transition-colors"
+              onClick={clearCart}
+            >Clear cart</button>
+          </div>
+          {cartItems.map((item) => (
+            <CartItem key={item.id} item={item} />
+          ))}
+        </div>
+
+        <div>
+          <CartSummary>
+            <Link
+              to="/checkout"
+              className="block w-full mt-4 py-3 bg-[#2AA7A1] text-white text-center text-[15px] font-bold rounded-xl no-underline hover:bg-[#23918c] transition-colors"
+            >
+              Proceed to Checkout →
+            </Link>
+          </CartSummary>
+          <CouponBox />
+        </div>
+      </div>
     </div>
   );
-};
-
-export default Cart;
+}

@@ -1,26 +1,20 @@
-import React from 'react'
+export const TAX_RATE = 0.05;
 
-export const calculatePricing = (cartItems, coupon = null) => {
-  const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
+export function calcSubtotal(cartItems) {
+  return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
 
-  const tax = subtotal * 0.05; // 5% GST
+export function calcTax(subtotal) {
+  return parseFloat((subtotal * TAX_RATE).toFixed(2));
+}
 
-  let discount = 0;
+export function calcDiscount(subtotal, coupon) {
+  if (!coupon) return 0;
+  if (coupon.type === "percent") return parseFloat((subtotal * coupon.discount).toFixed(2));
+  if (coupon.type === "flat") return Math.min(coupon.discount, subtotal);
+  return 0;
+}
 
-  // Coupon logic
-  if (coupon === "SAVE10") {
-    discount = subtotal * 0.1;
-  }
-
-  const total = subtotal + tax - discount;
-
-  return {
-    subtotal,
-    tax,
-    discount,
-    total
-  };
-};
+export function calcTotal(subtotal, tax, discount) {
+  return parseFloat((subtotal + tax - discount).toFixed(2));
+}

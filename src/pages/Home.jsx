@@ -1,41 +1,58 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
+import { products } from "../data/products";
+import { filterProducts } from "../utils/filters";
 import ProductGrid from "../components/product/ProductGrid";
 import ProductFilters from "../components/product/ProductFilters";
-import { products } from "../data/product";
-import { filterProducts } from "../utils/filters";
 
-const Home = () => {
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("all");
-  const [sort, setSort] = useState("");
+const MAX_PRICE = Math.ceil(Math.max(...products.map((p) => p.price)));
 
-  const filteredProducts = filterProducts(
-    products,
-    search,
-    category,
-    sort
+export default function Home() {
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
+
+  const [filters, setFilters] = useState({
+    category: "All",
+    sort: "",
+    maxPrice: MAX_PRICE,
+  });
+
+  const filtered = useMemo(
+    () => filterProducts(products, { ...filters, search: searchQuery }),
+    [filters, searchQuery]
   );
 
   return (
-    <div className="px-6 py-8">
+    <div className="page-container">
 
-      <h1 className="text-2xl font-semibold mb-6">
-        All Products
-      </h1>
+      {/* Hero */}
+      <div className="relative bg-gradient-to-br from-[#2AA7A1] to-[#23918c] rounded-2xl p-9 mb-7 text-white overflow-hidden">
+        <div className="absolute -top-5 -right-5 w-44 h-44 rounded-full bg-white/[0.07]" />
+        <div className="absolute right-16 -bottom-10 w-28 h-28 rounded-full bg-white/[0.05]" />
+        <p className="text-xs font-semibold uppercase tracking-widest opacity-80 mb-1.5">Your trusted health partner</p>
+        <h1 className="text-3xl font-bold leading-tight mb-2">
+          Medicines & Wellness,<br />Delivered Across India
+        </h1>
+        <p className="text-sm opacity-75 max-w-sm">
+          Quality medicines, supplements, devices & first aid — all at genuine prices.
+        </p>
+      </div>
 
-      <ProductFilters
-        search={search}
-        setSearch={setSearch}
-        category={category}
-        setCategory={setCategory}
-        sort={sort}
-        setSort={setSort}
-      />
+      {/* Layout */}
+      <div className="flex gap-6 items-start">
+        <ProductFilters filters={filters} onChange={setFilters} maxProductPrice={MAX_PRICE} />
 
-      <ProductGrid products={filteredProducts} />
+        <div className="flex-1 min-w-0">
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-sm text-gray-400">
+              {searchQuery && <><strong className="text-gray-700">"{searchQuery}"</strong> — </>}
+              {filtered.length} product{filtered.length !== 1 ? "s" : ""}
+            </span>
+          </div>
+          <ProductGrid products={filtered} />
+        </div>
+      </div>
 
     </div>
   );
-};
-
-export default Home;
+}

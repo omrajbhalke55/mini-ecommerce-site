@@ -1,95 +1,84 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useContext, useCallback } from "react";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { COUPONS } from "../data/products";
 
-export const CartContext = createContext();
+const CartContext = createContext(null);
 
-const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState(() => {
-        const stored = localStorage.getItem("cart");
-        return stored ? JSON.parse(stored) : [];
+export default function CartProvider({ children }) {
+  const [cartItems, setCartItems] = useLocalStorage("medihaa-cart", []);
+  const [appliedCoupon, setAppliedCoupon] = useLocalStorage("medihaa-coupon", null);
+  const [wishlist, setWishlist] = useLocalStorage("medihaa-wishlist", []);
+
+  const addToCart = useCallback((product, quantity = 1) => {
+    setCartItems((prev) => {
+      const existing = prev.find((i) => i.id === product.id);
+      if (existing) {
+        const newQty = product.stock
+          ? Math.min(existing.quantity + quantity, product.stock)
+          : existing.quantity + quantity;
+        return prev.map((i) => i.id === product.id ? { ...i, quantity: newQty } : i);
+      }
+      return [...prev, { ...product, quantity: Math.min(quantity, product.stock || 99) }];
     });
-    // const [coupon, setCoupon] = useState(null);
-    const [coupon, setCoupon] = useState(() => {  // presesting coupons
-        return localStorage.getItem("coupon") || null;
-    });
+  }, [setCartItems]);
 
-    useEffect(() => {
-        if (coupon) {
-            localStorage.setItem("coupon", coupon);
-        } else {
-            localStorage.removeItem("coupon");
-        }
-    }, [coupon]);
+  const removeFromCart = useCallback((id) => {
+    setCartItems((prev) => prev.filter((i) => i.id !== id));
+  }, [setCartItems]);
 
-    // Local storage Persesting data
-    useEffect(() => {
-        localStorage.setItem("cart", JSON.stringify(cartItems));
-    }, [cartItems]);
-
-    // ADD TO CART
-    const addToCart = (product) => {
-        setCartItems((prev) => {
-            const existing = prev.find(item => item.id === product.id);
-
-            if (existing) {
-                return prev.map(item =>
-                    item.id === product.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                );
-            }
-
-            return [...prev, { ...product, quantity: 1 }];
-        });
-    };
-
-    // REMOVE ITEM
-    const removeFromCart = (id) => {
-        setCartItems(prev => prev.filter(item => item.id !== id));
-    };
-
-    //  UPDATE QUANTITY
-    const updateQuantity = (id, qty) => {
-        if (qty < 1) return;
-
-        setCartItems(prev =>
-            prev.map(item =>
-                item.id === id ? { ...item, quantity: qty } : item
-            )
-        );
-    };
-
-    // CLEAR CART
-    const clearCart = () => {
-        setCartItems([]);
-    };
-
-    // APPLYING COUPONS
-    const applyCoupon = (code) => {
-        if (code === "SAVE10") {
-            setCoupon(code);
-            return true;
-        }
-        return false;
-    };
-
-    const removeCoupon = () => {
-        setCoupon(null);
-    };
-
-    return (
-        <CartContext.Provider value={{
-            cartItems,
-            addToCart,
-            removeFromCart,
-            updateQuantity,
-            clearCart,
-            coupon,
-            applyCoupon,
-            removeCoupon
-        }}>
-            {children}
-        </CartContext.Provider>
+  const updateQuantity = useCallback((id, quantity) => {
+    if (quantity < 1) return;
+    setCartItems((prev) =>
+      prev.map((i) => {
+        if (i.id !== id) return i;
+        return { ...i, quantity: i.stock ? Math.min(quantity, i.stock) : quantity };
+      })
     );
-};
+  }, [setCartItems]);
 
-export default CartProvider;
+  const clearCart = useCallback(() => {
+    setCartItems([]);
+    setAppliedCoupon(null);
+  }, [setCartItems, setAppliedCoupon]);
+
+  const applyCoupon = useCallback((code) => {
+    const coupon = COUPONS[code.toUpperCase()];
+    if (coupon) {
+      setAppliedCoupon({ code: code.toUpperCase(), ...coupon });
+      return { success: true, label: coupon.label };
+    }
+    return { success: false };
+  }, [setAppliedCoupon]);
+
+  const removeCoupon = useCallback(() => {
+    setAppliedCoupon(null);
+  }, [setAppliedCoupon]);
+
+  const toggleWishlist = useCallback((product) => {
+    setWishlist((prev) =>
+      prev.find((i) => i.id === product.id)
+        ? prev.filter((i) => i.id !== product.id)
+        : [...prev, product]
+    );
+  }, [setWishlist]);
+
+  const isInWishlist = useCallback((id) => wishlist.some((i) => i.id === id), [wishlist]);
+
+  const cartCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
+
+  return (
+    <CartContext.Provider value={{
+      cartItems, appliedCoupon, wishlist, cartCount,
+      addToCart, removeFromCart, updateQuantity, clearCart,
+      applyCoupon, removeCoupon, toggleWishlist, isInWishlist,
+    }}>
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export function useCartContext() {
+  const ctx = useContext(CartContext);
+  if (!ctx) throw new Error("useCartContext must be used within CartProvider");
+  return ctx;
+}
