@@ -1,13 +1,19 @@
 import { createContext, useContext, useCallback } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { COUPONS } from "../data/products";
+import { useAuthContext } from "./AuthContext";
 
 const CartContext = createContext(null);
 
 export default function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useLocalStorage("medihaa-cart", []);
-  const [appliedCoupon, setAppliedCoupon] = useLocalStorage("medihaa-coupon", null);
-  const [wishlist, setWishlist] = useLocalStorage("medihaa-wishlist", []);
+  // Get current user to scope storage keys
+  const { currentUser } = useAuthContext();
+  const userKey = currentUser ? currentUser.email : "guest";
+
+  // All keys are now scoped per user
+  const [cartItems, setCartItems] = useLocalStorage(`medihaa-cart-${userKey}`, []);
+  const [appliedCoupon, setAppliedCoupon] = useLocalStorage(`medihaa-coupon-${userKey}`, null);
+  const [wishlist, setWishlist] = useLocalStorage(`medihaa-wishlist-${userKey}`, []);
 
   const addToCart = useCallback((product, quantity = 1) => {
     setCartItems((prev) => {
